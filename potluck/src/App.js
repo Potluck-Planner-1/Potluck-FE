@@ -8,7 +8,7 @@ import RegisterSchema from './components/registerSchema';
 import * as yup from 'yup'
 import LoginForm from './components/loginForm'
 import axios from 'axios';
-
+import LoginSchema from './components/loginSchema'
 
 
 const originalRegisterValues = {
@@ -83,6 +83,9 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
 
     axios
     .post(url, newUser)
+    .then(response=>{
+      console.log('response',response.data)
+    })
     .catch(err=>{console.log('err', err)})
   }
 //verifies checkbox
@@ -94,13 +97,47 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
     termsRead(checked)
     setRegisterErrors({...registerErrors, termsOfService:''})
   }
+//variables needed for login page
+const [loginValues, setLoginValues] = useState({username: '', password: ''})
+const [loginErrors, setLoginErrors] = useState({username:'', password:''})
+const [loginDisabled, setLoginDisabled] = useState(false);
+const onLoginChange = evt=>{
+  const name= evt.currentTarget.name
+  const value = evt.currentTarget.value
+  // console.log(name, evt.currentTarget.value)
+  yup
+    .reach(LoginSchema, name)
+    .validate(value)
+    .then(valid=>{
+      setLoginErrors({...loginErrors,
+        [name]:''
+      })
+    })
+    .catch(err=>{
+      setLoginErrors({...loginErrors,
+        [name]:err.errors[0]
+      })
+    })
+
+  setLoginValues({...loginValues, [name]: value})
+}
+
+useEffect(evt =>{
+  LoginSchema.isValid(loginValues)
+  .then(valid=>{
+    setLoginDisabled(!valid)
+  })
+}, [loginValues])
 
   return (
     <div className="App">
       <NavBar />
       <Switch>
         <Route path='/login'><LoginForm
-        
+        values={loginValues}
+        onInputChange={onLoginChange}
+        loginDisabled={loginDisabled}
+        errors={loginErrors}
         /></Route>
         <Route path='/register'> <RegisterForm 
         values={registerValues} 
@@ -109,6 +146,7 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
         registerDisabled={registerDisabled}
         errors={registerErrors}
         termsOfService={registerCheckbox}
+        login={login}
         /></Route>
         <Route path='/'><Home /></Route>
       </Switch>
