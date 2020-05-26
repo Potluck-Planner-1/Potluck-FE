@@ -18,7 +18,7 @@ const RegisterForm = (props) =>{
         registerSubmit,
         registerDisabled,
         errors,
-        onCheckboxChange
+        termsOfService
     } = props;
     return (
         <Form style={styling}>
@@ -43,15 +43,16 @@ const RegisterForm = (props) =>{
                 <Row>
                 <Label>Password</Label>
                 <Input name='password' placeholder='password' type='password' value={values.password} onChange={onInputChange} />
-    <FormFeedback name='passwordErrors'>{errors.password}</FormFeedback>
+                <FormFeedback name='passwordErrors'>{errors.password}</FormFeedback>
                 </Row>
             </FormGroup>
 
             <FormGroup>
                 <Label>Have you read the Terms and Conditions</Label>
-                <Input name='termsOfService' type='checkbox' onClick={onCheckboxChange} />
+                <Input name='termsOfService' type='checkbox' onClick={termsOfService}/>
+                <FormFeedback name='termsOfServiceErrors'>{errors.termsOfService}</FormFeedback>
             </FormGroup>
-            <button disabled={registerDisabled} name='registerSubmit'>Submit</button>
+            <button disabled={registerDisabled} onClick={registerSubmit} name='registerSubmit'>Submit</button>
         </Form>
     )
 }
