@@ -146,7 +146,6 @@ useEffect(evt =>{
         registerDisabled={registerDisabled}
         errors={registerErrors}
         termsOfService={registerCheckbox}
-        login={login}
         /></Route>
         <Route path='/'><Home /></Route>
       </Switch>
