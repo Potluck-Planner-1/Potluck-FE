@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom'
 import Home from './components/home'
 import NavBar from './components/navbar'
-import RegisterForm from './components/registerrorm';
+import RegisterForm from './components/registerform';
 import RegisterSchema from './components/registerschema';
 import * as yup from 'yup'
 import LoginForm from './components/loginform'
