@@ -2,7 +2,7 @@
 
 command = "npm run build"
 publish ="/build"
-base = "../"
+base = "/"
 
 [[redirects]]
 from = "/*"
