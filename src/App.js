@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
 import {Route, Switch} from 'react-router-dom'
 import Home from './components/home'
 import NavBar from './components/navbar'
-import RegisterForm from './components/RegisterForm';
-import RegisterSchema from './components/registerSchema';
+import RegisterForm from './components/registerrorm';
+import RegisterSchema from './components/registerschema';
 import * as yup from 'yup'
-import LoginForm from './components/loginForm'
+import LoginForm from './components/loginform'
 import axios from 'axios';
-import LoginSchema from './components/loginSchema'
+import LoginSchema from './components/loginschema'
 
 
 const originalRegisterValues = {
