@@ -1,5 +1,6 @@
 import React from 'react';
 import {Form, FormGroup, FormFeedback, Label, Input, Row} from 'reactstrap';
+import Axios from 'axios';
 
 const styling = {
     width:'400px',
@@ -10,15 +11,16 @@ const styling = {
     paddingRight: '35px',
     paddingLeft: 'auto'
 }
+const url ='https://potluck-be.herokuapp.com/api/auth/login'
 
 const LoginForm = props =>{
 
     const {
         values,
         onInputChange,
-        login,
         loginDisabled,
-        errors
+        errors,
+        login
     } = props;
 
     return(
@@ -39,7 +41,13 @@ const LoginForm = props =>{
     <FormFeedback name='passwordErrors'>{errors.password}</FormFeedback>
                 </Row>
             </FormGroup>
-            <button disabled={loginDisabled} name='loginSubmit'>Login</button>
+            <button disabled={loginDisabled} onClick={event=>{
+                event.preventDefault()
+                const cred = {username:values.username,password: values.password}
+                Axios
+                .post(url, cred)
+                .then(response =>{console.log('logged in!', response)})
+            }} name='loginSubmit'>Login</button>
         </Form>
     )
 }

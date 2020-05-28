@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
 import {Route, Switch} from 'react-router-dom'
 import Home from './components/home'
 import NavBar from './components/navbar'
-import RegisterForm from './components/RegisterForm';
-import RegisterSchema from './components/registerSchema';
+import RegisterForm from './components/registerform';
+import RegisterSchema from './components/registerschema';
 import * as yup from 'yup'
-import LoginForm from './components/loginForm'
+import LoginForm from './components/loginform'
 import axios from 'axios';
-
+import LoginSchema from './components/loginschema'
 
 
 const originalRegisterValues = {
@@ -83,6 +82,9 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
 
     axios
     .post(url, newUser)
+    .then(response=>{
+      console.log('response',response.data)
+    })
     .catch(err=>{console.log('err', err)})
   }
 //verifies checkbox
@@ -94,13 +96,47 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
     termsRead(checked)
     setRegisterErrors({...registerErrors, termsOfService:''})
   }
+//variables needed for login page
+const [loginValues, setLoginValues] = useState({username: '', password: ''})
+const [loginErrors, setLoginErrors] = useState({username:'', password:''})
+const [loginDisabled, setLoginDisabled] = useState(false);
+const onLoginChange = evt=>{
+  const name= evt.currentTarget.name
+  const value = evt.currentTarget.value
+  // console.log(name, evt.currentTarget.value)
+  yup
+    .reach(LoginSchema, name)
+    .validate(value)
+    .then(valid=>{
+      setLoginErrors({...loginErrors,
+        [name]:''
+      })
+    })
+    .catch(err=>{
+      setLoginErrors({...loginErrors,
+        [name]:err.errors[0]
+      })
+    })
+
+  setLoginValues({...loginValues, [name]: value})
+}
+
+useEffect(evt =>{
+  LoginSchema.isValid(loginValues)
+  .then(valid=>{
+    setLoginDisabled(!valid)
+  })
+}, [loginValues])
 
   return (
     <div className="App">
       <NavBar />
       <Switch>
         <Route path='/login'><LoginForm
-        
+        values={loginValues}
+        onInputChange={onLoginChange}
+        loginDisabled={loginDisabled}
+        errors={loginErrors}
         /></Route>
         <Route path='/register'> <RegisterForm 
         values={registerValues} 
