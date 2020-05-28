@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch, useHistory} from 'react-router-dom'
 import Home from './components/home'
 import NavBar from './components/navbar'
 import RegisterForm from './components/registerform';
@@ -30,6 +30,7 @@ function App() {
   const [registerErrors, setRegisterErrors] = useState(originalRegisterErrors)
   const [registerDisabled, setRegisterDisabled] = useState(false);
   const [terms, termsRead] = useState(false);
+  let history = useHistory();
 //update fields on input change, and set feedback errors until matches schema  
   const registerChange = (evt) =>{
     const name= evt.currentTarget.name
@@ -84,6 +85,7 @@ const url ='https://potluck-be.herokuapp.com/api/auth/register'
     .post(url, newUser)
     .then(response=>{
       console.log('response',response.data)
+      history.push('/login')
     })
     .catch(err=>{console.log('err', err)})
   }
