@@ -1,13 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import {Route, Switch, useHistory} from 'react-router-dom'
 import Home from './components/home'
 import NavBar from './components/navbar'
-import RegisterForm from './components/registerform';
-import RegisterSchema from './components/registerschema';
+import RegisterForm from './components/RegisterForm';
+import RegisterSchema from './components/registerSchema';
 import * as yup from 'yup'
-import LoginForm from './components/loginform'
+import LoginForm from './components/loginForm'
 import axios from 'axios';
-import LoginSchema from './components/loginschema'
+import LoginSchema from './components/loginSchema'
+
+//from Prakash 🔽⏬//////////////////////////////////////////////////
+// import React, {useState, useReducer} from 'react';
+import {reducer, initialState} from './reducers/PotluckReducer';
+import PrivateRoute from './components/PrivateRoute';
+import AddItemForm from './components/AddItemForm';
+import AddItemCard from './components/AddItemCard';
+import PotluckInfoCard from './components/PotluckInfoCard';
+import NewPotluckInfoForm from './components/NewPotluckInfoForm';
+// import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+//from Prakash 🔼⏫////////////////////////////////////////////////
 
 
 const originalRegisterValues = {
@@ -130,6 +141,24 @@ useEffect(evt =>{
   })
 }, [loginValues])
 
+  // from Prakash 🔽⏬/////////////////////////////////////////////////////////////////////
+  const[state, dispatch] = useReducer(reducer, initialState)
+  console.log(state, '??what state says????????')
+ 
+const addTask = (item) => {
+      dispatch({type: 'ADD_TODO', payload: item})
+}
+
+const toggleCompleted = (id) => {
+      dispatch({type: 'TOGGLE_COMPLETED', payload: id})
+}
+
+const clearCompleted = () => {
+  dispatch({ type: 'CLEAR_COMPLETED'})
+}
+//from Prakash 🔼⏫///////////////////////////////////////////////////////////////////////////
+
+
   return (
     <div className="App">
       <NavBar />
@@ -149,6 +178,14 @@ useEffect(evt =>{
         termsOfService={registerCheckbox}
         /></Route>
         <Route path='/'><Home /></Route>
+
+        {/* // from Prakash 🔽⏬///////////////////////////////////////////////////////////////////// */}
+        <PrivateRoute exact path='/protected' component= {NewPotluckInfoForm}/>
+        <PrivateRoute exact path='/protected' component= {AddItemForm} addTask={addTask} clearCompleted={clearCompleted} />
+        <PrivateRoute exact path='/protected' component={PotluckInfoCard}/>
+        <PrivateRoute exact path='/protected' component={AddItemCard} state={state}  toggleCompleted={toggleCompleted} />
+        {/* //from Prakash 🔼⏫/////////////////////////////////////////////////////////////////////////// */}
+
       </Switch>
     </div>
   );
